@@ -1,7 +1,5 @@
-import TopDetectedCount from "./top-tiles/topDetectedCount";
-import TopRegisteredCount from "./top-tiles/topRegisteredCount";
-// import CountVisitors from "./count-visitors/countVisitors";
-// import CountRegistered from "./count-registered/countRegistered";
+import CountVisitors from "./count-visitors/countVisitors";
+import CountRegistered from "./count-registered/countRegistered";
 import VisitorByTime from "./visitors-by-time/visitorsByTime";
 import TopCampaign from "./top-campaign/topCampaign";
 import AvgDwellTime from "./dwell-time/avgDwellTime";
@@ -14,10 +12,8 @@ import SpotsGoogleMap from "./spotsGoogleMap/spotsGoogleMap";
 import BlogActivity from "./blog-activity/blogActivity";
 
 export {
-  TopDetectedCount,
-  TopRegisteredCount,
-  // CountVisitors,
-  // CountRegistered,
+  CountVisitors,
+  CountRegistered,
   VisitorByTime,
   TopCampaign,
   AvgDwellTime,

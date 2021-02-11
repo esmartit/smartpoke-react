@@ -331,7 +331,7 @@ var ThemeRoutes = [
     ],
   },
   {
-    path: "/home",
+    path: "/",
     pathTo: "/dashboards/home",
     name: "Dashboards",
     redirect: true,

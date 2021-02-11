@@ -557,7 +557,7 @@ function SensorTable() {
                 pwrOut: -70,
                 apMac: "",
                 serialNumber: "",
-                tags: {},
+                tags: [],
               };
               setSpotCode(item.spotId);
               setSliderIn(item.pwrIn);

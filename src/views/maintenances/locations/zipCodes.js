@@ -213,7 +213,7 @@ function ZipCodeTable() {
     let location = event.target.location.value;
     let item = {
       id: id,
-      cityId: cityId,
+      city: cityId,
       zipCode: zipCode,
       location: location,
     };
