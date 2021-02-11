@@ -1,10 +1,8 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
 import {
-  TopDetectedCount,
-  TopRegisteredCount,
-  // CountVisitors, 
-  // CountRegistered,
+  CountVisitors, 
+  CountRegistered,
   VisitorByTime,
   TopCampaign,
   AvgDwellTime,
@@ -22,10 +20,10 @@ const home = () => {
     <div>
       <Row>
         <Col sm={12} lg={6}>
-          <TopDetectedCount />
+          <CountVisitors />
         </Col>
         <Col sm={12} lg={6}>
-          <TopRegisteredCount />
+          <CountRegistered />
         </Col>
       </Row>
       <Row>

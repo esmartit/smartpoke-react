@@ -1,12 +1,12 @@
 import React from "react";
 import { Col } from "reactstrap";
 
-import topTilesService from "../../../services/home/toptiles.service";
+import sseService from "../../../services/home/topTilesCounters/toptilescounter.service";
 
 import "./topTiles.css";
 
 function TopCount({ api, title, color, icon }) {
-  const data = topTilesService.useEventSource(api);
+  const data = sseService.useEventSource(api);
 
   if (!data) {
     return (

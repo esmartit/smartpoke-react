@@ -245,7 +245,7 @@ function SpotTable() {
       country: countryId,
       state: stateId,
       city: cityId,
-      zipCode: zipCode,
+      zipcode: zipCode,
     };
     if (!id) {
       createItem(item);

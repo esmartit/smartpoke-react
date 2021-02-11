@@ -6,24 +6,26 @@ import {
 } from 'reactstrap';
 import TopCount from '../top-tiles/topTiles.js';
 
+const urlBase = "http://localhost:3001";
+
 const topListData = [
     {
         id: 1,
-        api: '/sensor-activity/total-registered-count',
+        api: urlBase+'/total-registered-count/?resourcePath=/sensor-activity/total-registered-count/',
         title: 'All',
         color: 'text-success',
         icon: 'fa-id-badge'
     },
     {
         id: 2,
-        api: '/sensor-activity/daily-registered-count',
+        api: urlBase+'/today-registered-count/?resourcePath=/sensor-activity/daily-registered-count/',
         title: 'Today',
         color: 'text-success',
         icon: 'fa-id-badge'
     },
     {
         id: 3,
-        api: '/sensor-activity/now-registered-count',
+        api: urlBase+'/now-registered-count/?resourcePath=/sensor-activity/now-registered-count/',
         title: 'Now',
         color: 'text-success',
         icon: 'fa-id-badge'
