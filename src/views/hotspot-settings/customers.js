@@ -44,7 +44,6 @@ function CustomerTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request customers. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -65,16 +64,10 @@ function CustomerTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getSpotList();
-      getCustomerList();
-    }
-  }, [loading]);
-
-  //   const handleChangeSpot = (event) => {
-  //     setSpotCode(event.target.value);
-  //   };
+    setVisible(false);
+    getSpotList();
+    getCustomerList();
+  }, []);
 
   const getSpotName = (code = null) => {
     let spotName = "";
@@ -92,7 +85,6 @@ function CustomerTable() {
         setSpotData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -102,10 +94,8 @@ function CustomerTable() {
       .getAll()
       .then((response) => {
         setCustomerData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

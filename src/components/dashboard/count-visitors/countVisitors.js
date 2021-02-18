@@ -4,28 +4,29 @@ import {
     Card,
     CardBody
 } from 'reactstrap';
-import TopCount from '../top-tiles/topTiles.js';
+import TopCount from '../top-tiles/topTiles';
 
-const urlBase = "http://localhost:3001";
+const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
+const urlBase = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
 
 const topListData = [
     {
         id: 1,
-        api: urlBase+'/total-detected-count/?resourcePath=/sensor-activity/total-detected-count/',
+        restApi: urlBase+'/total-detected-count/?resourcePath=/sensor-activity/total-detected-count/?timezone='+timeZone,
         title: 'All',
         color: 'text-dark',
         icon: 'fa-mobile'
     },
     {
         id: 2,
-        api: urlBase+'/today-detected-count/?resourcePath=/sensor-activity/today-detected-count/',
+        restApi: urlBase+'/today-detected-count/?resourcePath=/sensor-activity/today-detected-count/?timezone='+timeZone,
         title: 'Today',
         color: 'text-dark',
         icon: 'fa-mobile'
     },
     {
         id: 3,
-        api: urlBase+'/now-detected-count/?resourcePath=/sensor-activity/v2/now-detected-count/',
+        restApi: urlBase+'/now-detected-count/?resourcePath=/sensor-activity/now-detected-count/?timezone='+timeZone,
         title: 'Now',
         color: 'text-dark',
         icon: 'fa-mobile'

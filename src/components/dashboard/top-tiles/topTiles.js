@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Col } from "reactstrap";
-
-import sseService from "../../../services/home/topTilesCounters/toptilescounter.service";
 
 import "./topTiles.css";
 
-function TopCount({ api, title, color, icon }) {
-  const data = sseService.useEventSource(api);
+function TopCount({ restApi, title, color, icon }) {
+  const [counter, updateCounter] = useState(null);
 
-  if (!data) {
+  useEffect(() => {
+    let isMounted = true;
+    let sseCounter = new EventSource(restApi);
+    sseCounter.onmessage = function logEvents(event) {
+      if (isMounted) updateCounter(JSON.parse(event.data));
+    };
+    sseCounter.onerror = () => {
+      sseCounter.close();
+    }
+    return () => {
+      isMounted = false;
+      sseCounter.close();
+    };
+  }, [restApi]);
+
+  if (!counter) {
     return (
       <Col ld="4">
         <div className="d-flex">
@@ -32,7 +45,7 @@ function TopCount({ api, title, color, icon }) {
         </div>
         <div className="align-self-center">
           <h6 className="text-dark mt-2 mb-2">{title}</h6>
-          <h4 className={`mt-0 ${color}`}>{data.count}</h4>
+          <h4 className={`mt-0 ${color}`}>{counter.count}</h4>
         </div>
       </div>
     </Col>

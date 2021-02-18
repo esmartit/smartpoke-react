@@ -33,8 +33,7 @@ function NasTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request NAS. Network error!",
   });
-  const [loading, setLoading] = useState(true);
-
+  
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
   const onDismiss = () => {
@@ -54,21 +53,17 @@ function NasTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getNasList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getNasList();
+  }, []);
 
   const getNasList = () => {
     nasService
       .getAll()
       .then((response) => {
         setNasData(response.data._embedded.nas);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

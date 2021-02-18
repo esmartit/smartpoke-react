@@ -39,7 +39,6 @@ function HotSpotTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request hotspots. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -60,12 +59,10 @@ function HotSpotTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getSpotList();
-      getHotSpotList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getSpotList();
+    getHotSpotList();
+  }, []);
 
   const getSpotList = () => {
     spotService
@@ -74,7 +71,6 @@ function HotSpotTable() {
         setSpotData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -84,10 +80,8 @@ function HotSpotTable() {
       .getAll()
       .then((response) => {
         setHotSpotData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

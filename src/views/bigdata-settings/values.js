@@ -32,7 +32,6 @@ function ValueTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request values. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -53,21 +52,17 @@ function ValueTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getValueList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getValueList();
+  }, []);
 
   const getValueList = () => {
     valueService
       .getAll()
       .then((response) => {
         setValueData(response.data);
-        setLoading(false);
       })
       .catch((err) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -291,7 +286,7 @@ function ValueTable() {
           <Form onSubmit={(event) => handleSubmitDelete(event)}>
             <Input type="hidden" name="id" id="id" defaultValue={data.id} />
             <div>
-              Do you want to delete this value? <b>{data.name}</b>
+              Do you want to delete this value? <b>{getValueName(data.valueCode)}</b>
             </div>
             <br />
             <FormGroup>

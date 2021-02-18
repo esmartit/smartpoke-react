@@ -41,7 +41,6 @@ function SensorTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request sensors. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -62,12 +61,10 @@ function SensorTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getSpotList();
-      getSensorList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getSpotList();
+    getSensorList();
+  }, []);
 
   const getSpotList = () => {
     spotService
@@ -76,7 +73,6 @@ function SensorTable() {
         setSpotData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -86,10 +82,8 @@ function SensorTable() {
       .getAll()
       .then((response) => {
         setSensorData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

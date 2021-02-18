@@ -61,7 +61,6 @@ function TableCampaign() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request campaigns. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -82,11 +81,9 @@ function TableCampaign() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getCampaignList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getCampaignList();
+  }, []);
 
   const handleChangeSmsEmail = (event) => {
     setSmsEmailTxt(event.target.checked ? "SMS" : "Email");
@@ -112,10 +109,8 @@ function TableCampaign() {
       .getAll()
       .then((response) => {
         setCampaignData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

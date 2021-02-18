@@ -37,7 +37,6 @@ function CityTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request cities. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -58,12 +57,10 @@ function CityTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getCountryList();
-      getCityList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getCountryList();
+    getCityList();
+  }, []);
 
   const handleChangeCountry = (event) => {
     setCountryCode(event.target.value);
@@ -85,7 +82,6 @@ function CityTable() {
         setCountryData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -95,10 +91,8 @@ function CityTable() {
       .getAll()
       .then((response) => {
         setCityData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
