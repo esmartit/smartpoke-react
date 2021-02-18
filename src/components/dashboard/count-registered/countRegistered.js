@@ -6,26 +6,27 @@ import {
 } from 'reactstrap';
 import TopCount from '../top-tiles/topTiles.js';
 
-const urlBase = "http://localhost:3001";
+const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
+const urlBase = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
 
 const topListData = [
     {
         id: 1,
-        api: urlBase+'/total-registered-count/?resourcePath=/sensor-activity/total-registered-count/',
+        restApi: urlBase+'/total-registered-count/?resourcePath=/sensor-activity/total-registered-count/?timezone='+timeZone,
         title: 'All',
         color: 'text-success',
         icon: 'fa-id-badge'
     },
     {
         id: 2,
-        api: urlBase+'/today-registered-count/?resourcePath=/sensor-activity/daily-registered-count/',
+        restApi: urlBase+'/today-registered-count/?resourcePath=/sensor-activity/daily-registered-count/?timezone='+timeZone,
         title: 'Today',
         color: 'text-success',
         icon: 'fa-id-badge'
     },
     {
         id: 3,
-        api: urlBase+'/now-registered-count/?resourcePath=/sensor-activity/now-registered-count/',
+        restApi: urlBase+'/now-registered-count/?resourcePath=/sensor-activity/now-registered-count/?timezone='+timeZone,
         title: 'Now',
         color: 'text-success',
         icon: 'fa-id-badge'

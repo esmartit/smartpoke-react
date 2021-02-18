@@ -34,7 +34,6 @@ function CountryTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request countries. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -55,21 +54,17 @@ function CountryTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getCountryList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getCountryList();
+  }, []);
 
   const getCountryList = () => {
     countryService
       .getAll()
       .then((response) => {
         setCountryData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

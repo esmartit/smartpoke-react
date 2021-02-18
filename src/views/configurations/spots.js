@@ -47,7 +47,6 @@ function SpotTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request spots. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -68,15 +67,13 @@ function SpotTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getBusinessTypeList();
-      getCountryList();
-      getStateList();
-      getCityList();
-      getSpotList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getBusinessTypeList();
+    getCountryList();
+    getStateList();
+    getCityList();
+    getSpotList();
+  }, []);
 
   const handleChangeCountry = (event) => {
     setCountryCode(event.target.value);
@@ -95,10 +92,8 @@ function SpotTable() {
       .getAll()
       .then((response) => {
         setBusinessTypeData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -110,7 +105,6 @@ function SpotTable() {
         setCountryData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -122,7 +116,6 @@ function SpotTable() {
         setStateData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -134,7 +127,6 @@ function SpotTable() {
         setCityData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -144,10 +136,8 @@ function SpotTable() {
       .getAll()
       .then((response) => {
         setSpotData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

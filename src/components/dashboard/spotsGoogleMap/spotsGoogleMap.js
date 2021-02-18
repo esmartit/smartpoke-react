@@ -6,8 +6,16 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 import { Card, CardBody, Col } from "reactstrap";
-
+import sseClient from "./sseGoogleMap";
 import spotService from "../../../services/configurations/spots.service";
+
+const timeZone = process.env.REACT_APP_TIME_ZONE || "Europe/Madrid";
+const urlBase = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
+
+const restApi =
+  urlBase +
+  "/today-detected/?resourcePath=/sensor-activity/today-detected/?timezone=" +
+  timeZone;
 
 const containerStyle = {
   width: "100%",
@@ -38,8 +46,10 @@ const SpotsGoogleMap = () => {
       });
   };
 
+  const data = sseClient.useEventSource(restApi + "&spotId=esmartit-001");
   const spotsList = spotData.map((spot) => {
     return {
+      spotId: spot.spotId,
       name: spot.name,
       location: { lat: spot.latitude, lng: spot.longitude },
     };
@@ -68,7 +78,7 @@ const SpotsGoogleMap = () => {
             {spotsList.map((item) => {
               return (
                 <Marker
-                  key={item.name}
+                  key={item.spotId}
                   position={item.location}
                   onMouseOver={() => onSelect(item)}
                 />
@@ -77,10 +87,14 @@ const SpotsGoogleMap = () => {
             {selected.location && (
               <InfoWindow
                 position={selected.location}
-                clickable={true}
                 onCloseClick={() => setSelected({})}
               >
-                <p>{selected.name}</p>
+                <div>
+                  <h6>{selected.name}</h6>
+                  <div>In: {data.valueIn}</div>
+                  <div>Limit: {data.valueLimit}</div>
+                  <div>Out: {data.valueOut}</div>
+                </div>
               </InfoWindow>
             )}
           </GoogleMap>

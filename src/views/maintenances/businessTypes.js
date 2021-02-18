@@ -29,7 +29,6 @@ function BusinessTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request business types. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -50,21 +49,17 @@ function BusinessTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getBusinessTypeList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getBusinessTypeList();
+  }, []);
 
   const getBusinessTypeList = () => {
     businessTypeService
       .getAll()
       .then((response) => {
         setBusinessTypeData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

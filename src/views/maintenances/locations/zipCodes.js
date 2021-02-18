@@ -39,7 +39,6 @@ function ZipCodeTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request zipcodes. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -60,13 +59,11 @@ function ZipCodeTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getCountryList();
-      getStateList();
-      getZipCodeList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getCountryList();
+    getStateList();
+    getZipCodeList();
+  }, []);
 
   const handleChangeCountry = (event) => {
     setCountryCode(event.target.value);
@@ -104,7 +101,6 @@ function ZipCodeTable() {
         setCountryData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -116,7 +112,6 @@ function ZipCodeTable() {
         setStateData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -126,10 +121,8 @@ function ZipCodeTable() {
       .getAll()
       .then((response) => {
         setZipCodeData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

@@ -40,7 +40,6 @@ function LimitationTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request limitations. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -61,21 +60,17 @@ function LimitationTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getLimitationList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getLimitationList();
+  }, []);
 
   const getLimitationList = () => {
     limitationService
       .getAll()
       .then((response) => {
         setLimitationData(response.data._embedded.limitationEntities);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

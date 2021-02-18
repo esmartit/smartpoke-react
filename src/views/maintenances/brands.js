@@ -28,7 +28,6 @@ function BrandTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request brands. Network error!",
   });
-  const [loading, setLoading] = useState(true);
 
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
@@ -49,21 +48,17 @@ function BrandTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getBrandList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getBrandList();
+  }, []);
 
   const getBrandList = () => {
     brandService
       .getAll()
       .then((response) => {
         setBrandData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };

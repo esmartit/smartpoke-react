@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import GaugeChart from "react-gauge-chart";
-
+import sseDailyGoalRegistered from "./sseDailyGoal";
 import valueService from "../../../services/bigdata-settings/values.service";
+
+const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
+const urlBase = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
+const restApi = urlBase+'/daily_goal_registered/?resourcePath=/sensor-activity/daily-registered-count/?timezone='+timeZone;
 
 const DailyGoalRegistered = () => {
   const [valueData, setValueData] = useState([]);
@@ -42,7 +46,6 @@ const DailyGoalRegistered = () => {
     return valueByCode;
   };
 
-  const dailyRegistered = 5;
   const registeredValue = !loading ? getValue("daily_goal_registered") : 1;
 
   const optionsRegistered = {
@@ -51,6 +54,28 @@ const DailyGoalRegistered = () => {
     },
   };
 
+  const data = sseDailyGoalRegistered.useEventDailyGoal(restApi);
+
+  if (!data) {
+    return (
+      <React.Fragment>
+        <div className="d-flex justify-content-center">
+          Registered {registeredValue}
+        </div>
+        <GaugeChart
+          options={optionsRegistered}
+          nrOfLevels={30}
+          colors={["#DC3545", "#28A745"]}
+          arcWidth={0.3}
+          percent={Math.round((0 / registeredValue) * 100) / 100}
+          textColor={"#263238"}
+          needleColor={"#B3B3B3"}
+          needleBaseColor={"#B3B3B3"}
+          marginInPercent={0.09}
+        />
+      </React.Fragment>
+    );  
+  }
   return (
     <React.Fragment>
       <div className="d-flex justify-content-center">
@@ -61,7 +86,7 @@ const DailyGoalRegistered = () => {
         nrOfLevels={30}
         colors={["#DC3545", "#28A745"]}
         arcWidth={0.3}
-        percent={Math.round((dailyRegistered / registeredValue) * 100) / 100}
+        percent={Math.round((data.count / registeredValue) * 100) / 100}
         textColor={"#263238"}
         needleColor={"#B3B3B3"}
         needleBaseColor={"#B3B3B3"}

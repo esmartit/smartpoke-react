@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import GaugeChart from "react-gauge-chart";
-
+import sseDailyGoalDevice from "./sseDailyGoal";
 import valueService from "../../../services/bigdata-settings/values.service";
+
+const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
+const urlBase = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
+const restApi = urlBase+'/daily_goal_device/?resourcePath=/sensor-activity/today-detected-count/?timezone='+timeZone;
 
 const DailyGoalVisitor = () => {
   const [valueData, setValueData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     if (loading) {
       getValueList();
@@ -42,7 +46,6 @@ const DailyGoalVisitor = () => {
     return valueByCode;
   };
 
-  const dailyVisitor = 1000;
   const visitorValue = !loading ? getValue('daily_goal_device') : 1;
 
   const optionsVisitor = {
@@ -51,6 +54,28 @@ const DailyGoalVisitor = () => {
     },
   };
 
+  const data = sseDailyGoalDevice.useEventDailyGoal(restApi);
+
+  if(!data) {
+    return(
+      <React.Fragment>
+        <div className="d-flex justify-content-center">
+          Visitors {visitorValue}
+        </div>
+        <GaugeChart
+          options={optionsVisitor}
+          nrOfLevels={30}
+          colors={["#DC3545", "#28A745"]}
+          arcWidth={0.3}
+          percent={Math.round((0 / visitorValue) * 100) / 100}
+          textColor={"#263238"}
+          needleColor={"#B3B3B3"}
+          needleBaseColor={"#B3B3B3"}
+          marginInPercent={0.09}
+        />
+      </React.Fragment>
+    );
+  }
   return (
     <React.Fragment>
       <div className="d-flex justify-content-center">
@@ -61,7 +86,7 @@ const DailyGoalVisitor = () => {
         nrOfLevels={30}
         colors={["#DC3545", "#28A745"]}
         arcWidth={0.3}
-        percent={Math.round((dailyVisitor / visitorValue) * 100) / 100}
+        percent={Math.round((data.count / visitorValue) * 100) / 100}
         textColor={"#263238"}
         needleColor={"#B3B3B3"}
         needleBaseColor={"#B3B3B3"}

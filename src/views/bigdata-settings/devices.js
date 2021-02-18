@@ -32,8 +32,7 @@ function DeviceTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request devices. Network error!",
   });
-  const [loading, setLoading] = useState(true);
-
+  
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
   const onDismiss = () => {
@@ -53,21 +52,17 @@ function DeviceTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getDeviceList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getDeviceList();
+  }, []);
 
   const getDeviceList = () => {
     deviceService
       .getAll()
       .then((response) => {
         setDeviceData(response.data);
-        setLoading(false);
       })
       .catch((err) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -281,7 +276,7 @@ function DeviceTable() {
           <Form onSubmit={(event) => handleSubmitDelete(event)}>
             <Input type="hidden" name="id" id="id" defaultValue={data.id} />
             <div>
-              Do you want to delete this device? <b>{data.name}</b>
+              Do you want to delete this device? <b>{data.device}</b>
             </div>
             <br />
             <FormGroup>

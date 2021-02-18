@@ -35,8 +35,7 @@ function ZoneTable() {
     icon: "fas fa-ban",
     msg: "Error occured while trying to request zones. Network error!",
   });
-  const [loading, setLoading] = useState(true);
-
+  
   // For Dismiss Button with Alert
   const [visible, setVisible] = useState(true);
   const onDismiss = () => {
@@ -56,12 +55,10 @@ function ZoneTable() {
   };
 
   useEffect(() => {
-    if (loading) {
-      setVisible(false);
-      getSpotList();
-      getZoneList();
-    }
-  }, [loading]);
+    setVisible(false);
+    getSpotList();
+    getZoneList();
+  }, []);
 
   const getSpotList = () => {
     spotService
@@ -70,7 +67,6 @@ function ZoneTable() {
         setSpotData(response.data);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
@@ -80,10 +76,8 @@ function ZoneTable() {
       .getAll()
       .then((response) => {
         setZoneData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(true);
         setVisible(true);
       });
   };
