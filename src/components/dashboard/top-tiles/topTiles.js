@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Col } from "reactstrap";
+import { interval } from "rxjs";
+import service from "../../../services/home/topTiles/toptilecounters.service";
 
 import "./topTiles.css";
 
 function TopCount({ restApi, title, color, icon }) {
-  const [counter, updateCounter] = useState(null);
+  const [counter, updateCounter] = useState(0);
 
   useEffect(() => {
-    let isMounted = true;
-    let sseCounter = new EventSource(restApi);
-    sseCounter.onmessage = function logEvents(event) {
-      if (isMounted) updateCounter(JSON.parse(event.data));
-    };
-    sseCounter.onerror = () => {
-      sseCounter.close();
-    }
-    return () => {
-      isMounted = false;
-      sseCounter.close();
-    };
+    setInterval(() => {
+      service.getTopTileCounter(restApi)
+        .then((response) => {
+          updateCounter(response.data);
+        })
+        .catch((error) => {
+          console.log(error.message);
+          updateCounter(0);
+        });
+
+       return clearInterval(interval);
+    }, 15000);
   }, [restApi]);
 
   if (!counter) {

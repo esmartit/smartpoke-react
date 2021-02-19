@@ -4,11 +4,11 @@ const EventSource = require("eventsource");
 const dotenv = require("dotenv");
 dotenv.config({path: "./.env"});
 
-const strapi = process.env.REACT_APP_STRAPI;
-const radius = process.env.REACT_APP_RADIUS;
-const dataStore = process.env.REACT_APP_DATASTORE;
+const STRAPI = process.env.REACT_APP_STRAPI;
+const RADIUS = process.env.REACT_APP_RADIUS;
+const DATASTORE = process.env.REACT_APP_DATASTORE;
 // const timeZone = process.env.REACT_APP_TIME_ZONE;
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3081;
 
 // Middleware
 const cors = require("cors");
@@ -16,41 +16,48 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
 
+const app = express();
+
+// var allowlist = ['http://localhost:3081', 'http://localhost:9001']
+// var corsOptionsDelegate = function (req, callback) {
+//   var corsOptions;
+//   if (allowlist.indexOf(req.header('Origin')) !== -1) {
+//     corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+//   } else {
+//     corsOptions = { origin: false } // disable CORS for this request
+//   }
+//   callback(null, corsOptions) // callback expects two parameters: error and options
+// }
+
 // proxy middleware options
-const apiStrapi = createProxyMiddleware({
+const proxyStrapi = createProxyMiddleware({
   target: "https://app.cluster.smartpoke.es", // target host
   changeOrigin: true, // needed for virtual hosted sites
   ws: true, // proxy websockets
   router: {
-    // when request.headers.host == 'dev.localhost:3000',
-    // override target 'http://www.example.org' to 'http://localhost:8000'
-    "localhost:3001": `${strapi}`,
+    "localhost:3081": `${STRAPI}`,
   },
 });
 
 // proxy middleware options
-const apiRadius = createProxyMiddleware({
+const proxyRadius = createProxyMiddleware({
   target: "https://radius.cluster.smartpoke.es", // target host
   changeOrigin: true, // needed for virtual hosted sites
   ws: true, // proxy websockets
   router: {
-    // when request.headers.host == 'dev.localhost:3000',
-    // override target 'http://www.example.org' to 'http://localhost:8000'
-    "localhost:3001": `${radius}`,
+    "localhost:3081": `${RADIUS}`,
   },
 });
 
 // proxy middleware options
-// const apiDataStore = createProxyMiddleware({
-//   target: "https://store.cluster.smartpoke.es", // target host
-//   changeOrigin: true, // needed for virtual hosted sites
-//   ws: true, // proxy websockets
-//   router: {
-//     // when request.headers.host == 'dev.localhost:3000',
-//     // override target 'http://www.example.org' to 'http://localhost:8000'
-//     "localhost:3001": `${dataStore}`,
-//   },
-// });
+const proxyDataStore = createProxyMiddleware({
+  target: "https://store.cluster.smartpoke.es", // target host
+  changeOrigin: true, // needed for virtual hosted sites
+  ws: true, // proxy websockets
+  router: {
+    "localhost:3081": `${DATASTORE}`,
+  },
+});
 
 // create the proxy (without context)
 function sseMiddleware(req, res, next) {
@@ -77,7 +84,7 @@ function sseMiddleware(req, res, next) {
 
 function getStreamData(req, res) {
   let path = req.query.resourcePath;
-  let resourcePath = dataStore+path;
+  let resourcePath = DATASTORE+path;
 
   let sse = new EventSource(resourcePath);
   sse.onmessage = function(event) {
@@ -85,34 +92,52 @@ function getStreamData(req, res) {
   };    
 }
 
-const app = express();
-const server = require("http").Server(app);
+app.use(express.json());
+app.use(morgan("common"));
+app.use(helmet());
+// app.use(cors(corsOptionsDelegate));
+app.use(cors());
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const proxyStrapi = apiStrapi;
-const proxyRadius = apiRadius;
-// const proxyDataStore = apiDataStore;
+// pre-flight requests
+app.options('*', cors());
+
+app.get('/', function (req,res) {
+  res.set('Access-Control-Allow-Origin', '*');
+});
+
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to SmartPoke Platform." });
+});
 
 // Home
 // Top Tiles Counters
-app.get('/total-detected-count', sseMiddleware, getStreamData, function (req, res){ });
+// app.get('/total-detected-count', sseMiddleware, getStreamData, function (req, res){ });
 // app.get('/today-detected-count', sseMiddleware, getStreamData, function (req, res){ });
 // app.get('/now-detected-count', sseMiddleware, getStreamData, function (req, res){ });
 // app.get('/total-registered-count', sseMiddleware, getStreamData, function (req, res){ });
 // app.get('/today-registered-count', sseMiddleware, getStreamData, function (req, res){ });
 // app.get('/now-registered-count', sseMiddleware, getStreamData, function (req, res){ });
+// app.get('/v3/sensor-activity/', cors(corsOptionsDelegate), function (req, res, next) { });
+app.use('/v3/sensor-activity/', proxyDataStore);
+
 
 // Visitors By Time
-// app.get('/now-detected', sseMiddleware, getStreamData, function (req, res){ });
+app.get('/now-detected', sseMiddleware, getStreamData, function (req, res) { });
 
 // Daily Goal
-// app.get('/daily_goal_device', sseMiddleware, getStreamData, function (req, res){ });
-// app.get('/daily_goal_registered', sseMiddleware, getStreamData, function (req, res){ });
+app.get('/daily_goal_device', sseMiddleware, getStreamData, function (req, res) { });
+app.get('/daily_goal_registered', sseMiddleware, getStreamData, function (req, res) { });
 
 // Spots GoogleMap
-// app.get('/today-detected', sseMiddleware, getStreamData, function (req, res){ });
+app.get('/today-detected', sseMiddleware, getStreamData, function (req, res) { });
 
 // Spots Map
-// app.get('/today-countries', sseMiddleware, getStreamData, function (req, res){ });
+app.get('/today-countries', sseMiddleware, getStreamData, function (req, res) { });
 
 // Configurations
 app.use("/spots", proxyStrapi);
@@ -138,26 +163,15 @@ app.use("/states", proxyStrapi);
 app.use("/cities", proxyStrapi);
 app.use("/zipcodes", proxyStrapi);
 
-app.use(express.json());
-app.use(morgan("common"));
-app.use(cors());
-app.use(helmet());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const server = require("http").Server(app);
 
-// pre-flight requests
-// app.options('*', cors());
-
-app.get("/", function (req, res, next) {
-  res.json({ message: `endpoints server is working using PORT: ${port}` });
-});
-
-server.listen(port, (err) => {
+// set port, listen for requests
+server.listen(PORT, (err) => {
   if (err) {
     throw err;
   }
   /* eslint-disable no-console */
-  console.log(`endpoints server is working PORT: ${port}`);
+  console.log(`Server is running on port ${PORT}.`);
 });
 
 module.exports = server;

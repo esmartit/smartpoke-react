@@ -4,9 +4,9 @@ import { Card, CardBody } from "reactstrap";
 // import sseClient from "./sse-event";
 
 const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
-const urlBase = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
+const urlBase = process.env.REACT_APP_BASE_URL;
 
-const restApi = urlBase+'/now-detected/?resourcePath=/sensor-activity/v2/now-detected/?timezone='+timeZone;
+const restApi = urlBase + '/now-detected/?resourcePath=/sensor-activity/v2/now-detected/?timezone='+timeZone;
 
 const VisitorByTime = () => {
   let dataIn = 0;
