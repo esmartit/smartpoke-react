@@ -4,7 +4,7 @@ import sseDailyGoalRegistered from "./sseDailyGoal";
 import valueService from "../../../services/bigdata-settings/values.service";
 
 const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
-const urlBase = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
+const urlBase = process.env.REACT_APP_BASE_URL;
 const restApi = urlBase+'/daily_goal_registered/?resourcePath=/sensor-activity/daily-registered-count/?timezone='+timeZone;
 
 const DailyGoalRegistered = () => {

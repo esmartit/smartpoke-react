@@ -10,7 +10,7 @@ import sseClient from "./sseGoogleMap";
 import spotService from "../../../services/configurations/spots.service";
 
 const timeZone = process.env.REACT_APP_TIME_ZONE || "Europe/Madrid";
-const urlBase = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
+const urlBase = process.env.REACT_APP_BASE_URL;
 
 const restApi =
   urlBase +
