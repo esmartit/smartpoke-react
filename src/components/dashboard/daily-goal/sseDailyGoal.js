@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 class sseDataService {
 
   useEventDailyGoal(url) {
-    const [goal, updateGoal] = useState(null);
+    const [dailyGoal, updateDailyGoal] = useState(null);
   
     useEffect(() => {
       let isMounted = true;
 
       let sseDailyGoal = new EventSource(url);
       sseDailyGoal.onmessage = function logEvents(event) {
-        if (isMounted) updateGoal(JSON.parse(event.data));
+        if (isMounted) updateDailyGoal(JSON.parse(event.data));
       };
       sseDailyGoal.onerror = () => {
         sseDailyGoal.close();
@@ -20,8 +20,10 @@ class sseDataService {
         sseDailyGoal.close();
       };
     }, [url]);
+
+    if (!dailyGoal) return 0;
   
-    return goal;
+    return dailyGoal.count;
   };
 };
 

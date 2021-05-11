@@ -1,53 +1,51 @@
 import React, { useState, useEffect } from "react";
+// import React from "react";
 import { VectorMap } from "react-jvectormap";
 import { Card, CardBody } from "reactstrap";
-import sseClient from "./sseSpotMap";
-import spotService from "../../../services/configurations/spots.service";
+// import sseClient from "./sseSpotMap";
 
 import "../../../views/maps/VectorMap.css";
 
-const timeZone = process.env.REACT_APP_TIME_ZONE || "Europe/Madrid";
+const timeZone = process.env.REACT_APP_TIME_ZONE;
 const urlBase = process.env.REACT_APP_BASE_URL;
 
-const restApi =
-  urlBase +
-  "/today-countries/?resourcePath=/sensor-activity/today-countries/?timezone=" +
-  timeZone;
+function SpotsMap() {
+  const restApi = urlBase + "/today-countries/?resourcePath=/sensor-activity/today-countries/?timezone=" + timeZone;
+  // const data = sseClient.useEventSource(restApi);
 
-const SpotsMap = () => {
-  const [spotData, setSpotData] = useState([]);
+  const [data, updateData] = useState([]);
 
   useEffect(() => {
-    getSpotList();
-  }, []);
-
-  const getSpotList = () => {
-    spotService
-      .getAll()
-      .then((response) => {
-        setSpotData(response.data);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
-  function getMarkers() {
-    const markers = {};
-    for (let i=0; i < spotData.length; i++) {
-      let latitude = spotData[i].latitude;
-      let longitude = spotData[i].longitude;
-      let name = spotData[i].name;
-
-      markers[i] = {
-        "latLng": [latitude, longitude],
-        "name": name
-      };
+    let isMounted = true;
+    let seSpotMap = new EventSource(restApi);
+    seSpotMap.onmessage = function logEvents(event) {
+      if (isMounted) {
+        updateData(JSON.parse(event.data));
+        // let eventData = JSON.parse(event.data);
+        // for (let i=0; i < eventData.length; i++) { 
+        //     let name = eventData[i].name;
+        //     let value = eventData[i].value;
+        //     spotMap[name] = value
+        // }
+      }
+      // updateData(spotMap);
     };
-    return markers;
-  }
-  const markers = getMarkers();
-  const data = sseClient.useEventSource(restApi);
+
+    seSpotMap.onerror = () => {
+      seSpotMap.close();
+    };
+    return () => {
+      isMounted = false;
+      seSpotMap.close();
+    };
+  });
+
+  const spotMap = data.map((spot) => {
+    return {
+      [spot.name]: spot.value,
+    };
+  });
+
 
   return (
     <Card>
@@ -78,24 +76,13 @@ const SpotsMap = () => {
             },
           }}
           series={{
-            markers: [
-              {
-                attribute: "r",
-                scale: [5],
-                value: [100],
-                normalizeFunction: "polynomial",
-              },
-            ],
             regions: [
               {
-                values: data,
+                values: spotMap,
                 scale: ["#99ABB4", "#007BFF"],
               },
             ],
           }}
-          markers={[
-            markers,
-          ]}
         />
       </CardBody>
     </Card>

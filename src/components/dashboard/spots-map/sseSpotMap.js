@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 class sseDataService {
 
   useEventSource(url) {
-    // const [data, updateData] = useState([]);
-    const [data, updateData] = useState({});
+    const [data, updateData] = useState([]);
+    // const [data, updateData] = useState({});
     useEffect(() => {
       let isMounted = true;
       let seSpotMap = new EventSource(url);

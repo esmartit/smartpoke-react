@@ -6,7 +6,6 @@ class sseDataSevice {
     const visitIn = useRef(0);
     const visitLimit = useRef(0);
     const visitOut = useRef(0);
-    // let visitHour = 0;
     const visitHourNew = useRef((new Date()).getHours());
     const visitAntIn = useRef(0);;
     const visitAntLimit = useRef(0);
@@ -16,13 +15,12 @@ class sseDataSevice {
       valueLimit: 0,
       valueOut: 0,
     });
-    // const [data, updateData] = useState({});
+
     useEffect(() => {
       let isMounted = true;
       let seGoogleMap = new EventSource(url);
       seGoogleMap.onmessage = function logEvents(event) {
         if (isMounted) {
-          // updateData(JSON.parse(event.data));
           let eventData = JSON.parse(event.data);
           let visitHour = (new Date(eventData.time)).getHours();
           let dataIn = eventData.inCount;

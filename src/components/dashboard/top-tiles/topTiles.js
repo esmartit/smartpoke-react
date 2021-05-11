@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Col } from "reactstrap";
-import { interval } from "rxjs";
 import service from "../../../services/home/topTiles/toptilecounters.service";
 
 import "./topTiles.css";
@@ -9,7 +8,7 @@ function TopCount({ restApi, title, color, icon }) {
   const [counter, updateCounter] = useState(0);
 
   useEffect(() => {
-    setInterval(() => {
+    let i = setInterval(() => {
       service.getTopTileCounter(restApi)
         .then((response) => {
           updateCounter(response.data);
@@ -19,9 +18,9 @@ function TopCount({ restApi, title, color, icon }) {
           updateCounter(0);
         });
 
-       return clearInterval(interval);
     }, 15000);
-  }, [restApi]);
+    return () => clearInterval(i);
+  }, [restApi, counter]);
 
   if (!counter) {
     return (

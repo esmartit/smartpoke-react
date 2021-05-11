@@ -9,13 +9,10 @@ import { Card, CardBody, Col } from "reactstrap";
 import sseClient from "./sseGoogleMap";
 import spotService from "../../../services/configurations/spots.service";
 
-const timeZone = process.env.REACT_APP_TIME_ZONE || "Europe/Madrid";
+const timeZone = process.env.REACT_APP_TIME_ZONE;
 const urlBase = process.env.REACT_APP_BASE_URL;
 
-const restApi =
-  urlBase +
-  "/today-detected/?resourcePath=/sensor-activity/today-detected/?timezone=" +
-  timeZone;
+const restApi = urlBase + "/today-detected/?resourcePath=/sensor-activity/today-detected/?timezone=" + timeZone;
 
 const containerStyle = {
   width: "100%",
@@ -46,12 +43,13 @@ const SpotsGoogleMap = () => {
       });
   };
 
-  const data = sseClient.useEventSource(restApi + "&spotId=esmartit-001");
+  const data = sseClient.useEventSource(restApi);
   const spotsList = spotData.map((spot) => {
     return {
       spotId: spot.spotId,
       name: spot.name,
       location: { lat: spot.latitude, lng: spot.longitude },
+      api: restApi + '&spotId=' + spot.spotId,
     };
   });
 
