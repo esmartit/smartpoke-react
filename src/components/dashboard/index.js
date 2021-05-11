@@ -1,5 +1,7 @@
 import CountVisitors from "./count-visitors/countVisitors";
 import CountRegistered from "./count-registered/countRegistered";
+import TopTilesVisitors from "./top-tiles/topTilesVisitors";
+import TopTilesRegistered from "./top-tiles/topTilesRegistered";
 import VisitorByTime from "./visitors-by-time/visitorsByTime";
 import TopCampaign from "./top-campaign/topCampaign";
 import AvgDwellTime from "./dwell-time/avgDwellTime";
@@ -14,6 +16,8 @@ import BlogActivity from "./blog-activity/blogActivity";
 export {
   CountVisitors,
   CountRegistered,
+  TopTilesVisitors,
+  TopTilesRegistered,
   VisitorByTime,
   TopCampaign,
   AvgDwellTime,

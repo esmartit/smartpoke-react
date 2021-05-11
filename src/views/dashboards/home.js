@@ -1,8 +1,10 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
 import {
-  CountVisitors, 
-  CountRegistered,
+  // CountVisitors, 
+  // CountRegistered,
+  TopTilesVisitors,
+  TopTilesRegistered,
   VisitorByTime,
   TopCampaign,
   AvgDwellTime,
@@ -18,12 +20,20 @@ import {
 const home = () => {
   return (
     <div>
-      <Row>
+      {/* <Row>
         <Col sm={12} lg={6}>
           <CountVisitors />
         </Col>
         <Col sm={12} lg={6}>
           <CountRegistered />
+        </Col>
+      </Row> */}
+      <Row>
+        <Col sm={12} lg={6}>
+          <TopTilesVisitors />
+        </Col>
+        <Col sm={12} lg={6}>
+          <TopTilesRegistered />
         </Col>
       </Row>
       <Row>

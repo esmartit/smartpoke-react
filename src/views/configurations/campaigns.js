@@ -195,6 +195,20 @@ function TableCampaign() {
       });
   };
 
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let id = event.target.id.value;
@@ -203,9 +217,9 @@ function TableCampaign() {
     let smsEmail = event.target.smsEmail.checked;
     let message = contentMsg;
     let deferred = event.target.deferred.checked;
-    let deferredDate = new Date("1900-01-01");
+    let deferredDate = "1900-01-01T12:00:00.000Z";
     if (deferred) { 
-        deferredDate = event.target.deferredDate.value;
+        deferredDate = new Date(event.target.deferredDate.value+' '+event.target.deferredTime.value);
     }
     let percent = 0;
     let valueIn = 0;
@@ -268,6 +282,7 @@ function TableCampaign() {
           />
         </div>
       ),
+      defDate: campaign.deferred ? (new Date(campaign.deferredDate)).toLocaleString() : "",
       deferredDate: campaign.deferred ? campaign.deferredDate : "",
       percent: campaign.percent,
       type: campaign.type,
@@ -404,15 +419,28 @@ function TableCampaign() {
                   />
                 </FormGroup>
               </Col>
-              <Col sm={12} md={6}>
+              <Col sm={12} md={5}>
                 <FormGroup>
-                  <Label for="deferredDate">Deferred Date *</Label>
+                  <Label for="deferredDate">Date *</Label>
                   <Input
                     type="date"
                     name="deferredDate"
                     id="deferredDate"
                     required={true}
-                    defaultValue={data.deferredDate}
+                    defaultValue={formatDate((new Date(data.deferredDate)).toDateString())}
+                    disabled={!deferredOpt}
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm={12} md={3}>
+                <FormGroup>
+                  <Label for="deferredTime">Time</Label>
+                  <Input
+                    type="time"
+                    name="deferredTime"
+                    id="deferredTime"
+                    required={true}
+                    defaultValue={(new Date(data.deferredDate)).toLocaleTimeString()}
                     disabled={!deferredOpt}
                   />
                 </FormGroup>
@@ -580,6 +608,11 @@ function TableCampaign() {
               {
                 Header: "Deferred Date",
                 accessor: "deferredDate",
+                show: false,
+              },
+              {
+                Header: "Deferred Date",
+                accessor: "defDate",
               },
               {
                 Header: "Actions",

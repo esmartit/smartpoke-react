@@ -227,6 +227,7 @@ function CustomerTable() {
       mobilePhone: customer.mobilePhone,
       email: customer.email,
       birthDate: customer.birthDate,
+      age: new Date().getFullYear() - new Date(customer.birthDate).getFullYear(),
       gender: customer.gender,
       zipCode: customer.zipCode,
       membership: customer.membership ? "Checked" : "",
@@ -600,6 +601,10 @@ function CustomerTable() {
               {
                 Header: "Birth Date",
                 accessor: "birthDate",
+              },
+              {
+                Header: "Age",
+                accessor: "age",
               },
               {
                 Header: "Gender",

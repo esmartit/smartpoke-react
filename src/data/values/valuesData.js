@@ -19,6 +19,16 @@ const valueCodes = [
     name: "Total SMS Month",
     code: "total_sms_month",
   },
+  {
+    id: 5,
+    name: "SMS Supervisor",
+    code: "mobile_sms_supervisor",
+  },
+  {
+    id: 6,
+    name: "Unsubscribe",
+    code: "unsubscribe",
+  },
 ];
 
 export default valueCodes;

@@ -3,7 +3,7 @@ import GaugeChart from "react-gauge-chart";
 import sseDailyGoalRegistered from "./sseDailyGoal";
 import valueService from "../../../services/bigdata-settings/values.service";
 
-const timeZone = process.env.REACT_APP_TIME_ZONE || 'Europe/Madrid';
+const timeZone = process.env.REACT_APP_TIME_ZONE;
 const urlBase = process.env.REACT_APP_BASE_URL;
 const restApi = urlBase+'/daily_goal_registered/?resourcePath=/sensor-activity/daily-registered-count/?timezone='+timeZone;
 
@@ -55,38 +55,21 @@ const DailyGoalRegistered = () => {
   };
 
   const data = sseDailyGoalRegistered.useEventDailyGoal(restApi);
-
-  if (!data) {
-    return (
-      <React.Fragment>
-        <div className="d-flex justify-content-center">
-          Registered {registeredValue}
-        </div>
-        <GaugeChart
-          options={optionsRegistered}
-          nrOfLevels={30}
-          colors={["#DC3545", "#28A745"]}
-          arcWidth={0.3}
-          percent={Math.round((0 / registeredValue) * 100) / 100}
-          textColor={"#263238"}
-          needleColor={"#B3B3B3"}
-          needleBaseColor={"#B3B3B3"}
-          marginInPercent={0.09}
-        />
-      </React.Fragment>
-    );  
-  }
+  
   return (
     <React.Fragment>
       <div className="d-flex justify-content-center">
-        Registered {registeredValue}
+      Registered
+      </div>
+      <div className="d-flex justify-content-center">
+        <b> {Intl.NumberFormat().format(registeredValue)} </b>
       </div>
       <GaugeChart
         options={optionsRegistered}
         nrOfLevels={30}
         colors={["#DC3545", "#28A745"]}
         arcWidth={0.3}
-        percent={Math.round((data.count / registeredValue) * 100) / 100}
+        percent={Math.round((data / registeredValue) * 100) / 100}
         textColor={"#263238"}
         needleColor={"#B3B3B3"}
         needleBaseColor={"#B3B3B3"}
